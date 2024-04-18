@@ -5,31 +5,21 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class MovementHandler : MonoBehaviour
 {
-    private IInput _playerInpur;
-    private CharacterController _characterController;
-    private Transform _cachedTransform;
-    [SerializeField] private float _movementSpeed;
+    protected IInput _input;
+    protected Rigidbody2D _rigidbody;
+    protected Transform _cachedTransform;
+    [SerializeField] protected float _movementSpeed;
 
-    [Inject]
-    private void Construct(IInput playerInpur)
+    protected virtual void Direction(Vector3 direction)
     {
-        _playerInpur = playerInpur;
-        _playerInpur.OnMove += MoveTo;
+        _cachedTransform.up = direction.normalized;
     }
 
-    private void Awake()
+    protected virtual void MoveTo()
     {
-        _characterController = GetComponent<CharacterController>();
-        _cachedTransform = GetComponent<Transform>();
-    }
-
-
-    private void MoveTo(Vector3 direction)
-    {
-        _characterController.Move(direction.normalized * Time.deltaTime * _movementSpeed);
-        _cachedTransform.up = direction;
+        _rigidbody.velocity = _cachedTransform.up * _movementSpeed;
     }
 }

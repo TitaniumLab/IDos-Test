@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class BulletUnityPool 
+public class BulletUnityPool
 {
     private Bullet _bulletPrefab;
     private Transform _parentTransform;
     private ObjectPool<Bullet> _pool;
-    public BulletUnityPool(Bullet bulletPrefab, Transform poolsHandler, string creatorName)
+    private AttackHandler _attackHandler;
+    public BulletUnityPool(AttackHandler attackHandler, Transform poolsHandler, string creatorName)
     {
         _pool = new ObjectPool<Bullet>(CreateUnit, GetUnit, ReleaseUnit);
-        Transform poolHandler =  new GameObject($"{creatorName} pool").transform;
+        Transform poolHandler = new GameObject($"{creatorName} pool").transform;
         poolHandler.parent = poolsHandler;
         _parentTransform = poolHandler;
-        _bulletPrefab = bulletPrefab;
+        _attackHandler = attackHandler;
+        _bulletPrefab = attackHandler.WeaponConfig.BulletPrefab;
     }
 
     public Bullet Get()
@@ -29,8 +31,9 @@ public class BulletUnityPool
 
     private Bullet CreateUnit()
     {
-        var bullet = Object.Instantiate(_bulletPrefab, _parentTransform);
-        bullet.GetComponent<Bullet>().SetPool(_pool);
+        Bullet bullet = Object.Instantiate(_bulletPrefab, _parentTransform);
+        bullet.SetPool(_pool);
+        bullet.SetWeapon(_attackHandler);
         return bullet;
     }
 

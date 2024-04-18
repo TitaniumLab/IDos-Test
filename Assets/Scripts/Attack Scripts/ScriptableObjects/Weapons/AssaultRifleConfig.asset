@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: AssaultRifleConfig
   m_EditorClassIdentifier: 
   <WeaponPrefab>k__BackingField: {fileID: 7695148928894124911, guid: 6cde485b544d93140991b41b0dbe0181, type: 3}
+  <BulletPrefab>k__BackingField: {fileID: -4119682213806627338, guid: 80422b3eb3263684cb6f0dc9efff3e05, type: 3}
   <Damage>k__BackingField: 1
-  <FireRate>k__BackingField: 1
+  <FireRate>k__BackingField: 10
   <BulletsPerShot>k__BackingField: 1
+  <SpreadEnlge>k__BackingField: 5
+  <BulletSpeed>k__BackingField: 10
+  <BulletLifeTime>k__BackingField: 1
