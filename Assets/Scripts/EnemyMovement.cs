@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
-using Zenject;
 
 [RequireComponent(typeof(IInput))]
 public class EnemyMovement : MovementHandler

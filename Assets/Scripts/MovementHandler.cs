@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Tilemaps;
-using UnityEngine.InputSystem;
 using UnityEngine;
-using Zenject;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovementHandler : MonoBehaviour

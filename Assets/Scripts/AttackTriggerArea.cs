@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackTriggerArea : MonoBehaviour
@@ -9,7 +7,7 @@ public class AttackTriggerArea : MonoBehaviour
     public event Action<Transform> OnTriggetExit;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out IDamagable damagable))
+        if (collision.TryGetComponent(out IDamagable damagable) && collision.transform is not null)
         {
             OnTriggetEnter?.Invoke(collision.transform);
         }

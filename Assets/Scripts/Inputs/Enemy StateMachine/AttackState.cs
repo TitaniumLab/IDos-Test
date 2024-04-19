@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackState : State
@@ -15,14 +13,17 @@ public class AttackState : State
     {
         //if (_enemy.CurrentTargetTransform is null)
         //    _stateMachine.ChangetState(_enemy.EnemyPatrolState);
-        if (!_enemy.IsAttacking)
+        if (!_enemy.IsAttacking || _enemy.CurrentTargetTransform is null)
             _stateMachine.ChangetState(_enemy.EnemyChaseState);
     }
 
     public override void BehaviorUpdate()
     {
-        Vector3 direction = _enemy.CurrentTargetTransform.position - _enemy.transform.position;
-        _enemy.Rotate(direction);
-        _enemy.Fire();
+        if (_enemy.IsAttacking && _enemy.CurrentTargetTransform is not null)
+        {
+            Vector3 direction = _enemy.CurrentTargetTransform.position - _enemy.transform.position;
+            _enemy.Rotate(direction);
+            _enemy.Fire();
+        }
     }
 }

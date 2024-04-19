@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Enemy : MonoBehaviour, IInput
+public class Enemy : MonoBehaviour, IInput, IAgro
 {
     [field: SerializeField] public IDamagable.Fraction TargetFraction { get; private set; }
     [SerializeField] private Transform RouteParent;
@@ -13,6 +12,7 @@ public class Enemy : MonoBehaviour, IInput
     [field: SerializeField] public float IdolTime { get; private set; }
     [field: SerializeField] public bool IsAttacking { get; private set; }
     [field: SerializeField] public Transform CurrentTargetTransform { get; private set; }
+    [field: SerializeField] public Vector3 AgroPos { get; private set; }
     public Rigidbody2D _enemyRb { get; private set; }
     public Transform _enemyTransform { get; private set; }
 
@@ -22,9 +22,6 @@ public class Enemy : MonoBehaviour, IInput
     public PatrolState EnemyPatrolState { get; private set; }
     public ChaseState EnemyChaseState { get; private set; }
     public AttackState EnemyAttackState { get; private set; }
-
-    //public StateMachine EnemyStateMachine { get; private set; }
-    //public StateMachine EnemyStateMachine { get; private set; }
 
     public event Action OnMove;
     public event Action<Vector3> OnRotation;
@@ -43,6 +40,16 @@ public class Enemy : MonoBehaviour, IInput
         _enemyRb = GetComponent<Rigidbody2D>();
         _enemyTransform = GetComponent<Transform>();
 
+        EnemyStateMachine = new StateMachine();
+        EnemyIdolState = new IdolState(this, EnemyStateMachine);
+        EnemyPatrolState = new PatrolState(this, EnemyStateMachine);
+        EnemyChaseState = new ChaseState(this, EnemyStateMachine);
+        EnemyAttackState = new AttackState(this, EnemyStateMachine);
+
+        EnemyStateMachine.Initialize(EnemyIdolState);
+
+
+
         ChaseTriggerArea chaseTriggerArea = GetComponentInChildren<ChaseTriggerArea>();
         chaseTriggerArea.OnTriggetEnter += TriggetEnemyChase;
         chaseTriggerArea.OnTriggetExit += DisableEnemyChase;
@@ -51,13 +58,7 @@ public class Enemy : MonoBehaviour, IInput
         attackTriggerArea.OnTriggetEnter += EnableAttack;
         attackTriggerArea.OnTriggetExit += DisableAttack;
 
-        EnemyStateMachine = new StateMachine();
-        EnemyIdolState = new IdolState(this, EnemyStateMachine);
-        EnemyPatrolState = new PatrolState(this, EnemyStateMachine);
-        EnemyChaseState = new ChaseState(this, EnemyStateMachine);
-        EnemyAttackState = new AttackState(this, EnemyStateMachine);
-
-        EnemyStateMachine.Initialize(EnemyIdolState);
+        CurrentTargetTransform = null;
     }
 
 
@@ -103,12 +104,23 @@ public class Enemy : MonoBehaviour, IInput
 
     private void EnableAttack(Transform targetTransform)
     {
-        IsAttacking = true;
+        if (CurrentTargetTransform is not null)
+            IsAttacking = true;
     }
 
     private void DisableAttack(Transform targetTransform)
     {
         IsAttacking = false;
+    }
+
+    public void Agro(Vector3 agroPos)
+    {
+        AgroPos = agroPos;
+    }
+
+    public void ToNextRoutePoint()
+    {
+        CurrentPointIndex = (CurrentPointIndex + 1) % RoutePoints.Count;
     }
     #endregion
 }

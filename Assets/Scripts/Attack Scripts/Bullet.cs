@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -18,6 +16,9 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.TryGetComponent(out IAgro agro))
+            agro.Agro(_attackHandler.transform.position);
+
         if (!collision.TryGetComponent(out Bullet bullet) && gameObject.activeSelf)
         {
             if (collision.TryGetComponent(out IDamagable damagable) &&

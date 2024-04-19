@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ChaseState : State
@@ -20,8 +18,11 @@ public class ChaseState : State
 
     public override void BehaviorUpdate()
     {
-        Vector3 direction = _enemy.CurrentTargetTransform.position - _enemy.transform.position;
-        _enemy.Rotate(direction);
-        _enemy.Move();
+        if (_enemy.CurrentTargetTransform is not null)
+        {
+            Vector3 direction = _enemy.CurrentTargetTransform.position - _enemy.transform.position;
+            _enemy.Rotate(direction);
+            _enemy.Move();
+        }
     }
 }

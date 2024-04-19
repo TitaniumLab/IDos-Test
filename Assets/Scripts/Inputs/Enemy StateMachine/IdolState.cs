@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class IdolState : State
@@ -18,7 +16,10 @@ public class IdolState : State
     public override void LogicUpdate()
     {
         if (Time.time > _idolEndTime)
+        {
+            _enemy.ToNextRoutePoint();
             _stateMachine.ChangetState(_enemy.EnemyPatrolState);
+        }
 
         if (_enemy.CurrentTargetTransform is not null)
             _stateMachine.ChangetState(_enemy.EnemyChaseState);

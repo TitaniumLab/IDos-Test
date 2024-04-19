@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PatrolState : State
@@ -22,9 +20,21 @@ public class PatrolState : State
 
     public override void BehaviorUpdate()
     {
-        Vector3 direction = _enemy.RoutePoints[_enemy.CurrentPointIndex].position - _enemy.transform.position;
-        Debug.Log(direction);
-        _enemy.Rotate(direction);
-        _enemy.Move();
+
+        if (_enemy.AgroPos != Vector3.zero)
+        {
+            float agroDistance = (_enemy.AgroPos - _enemy.transform.position).magnitude;
+            Vector3 direction = _enemy.AgroPos - _enemy.transform.position;
+            _enemy.Rotate(direction);
+            _enemy.Move();
+            if (agroDistance < _distanceToPoint)
+                _enemy.Agro(Vector3.zero);
+        }
+        else
+        {
+            Vector3 direction = _enemy.RoutePoints[_enemy.CurrentPointIndex].position - _enemy.transform.position;
+            _enemy.Rotate(direction);
+            _enemy.Move();
+        }
     }
 }

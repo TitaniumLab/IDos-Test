@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class MobileInput : MonoBehaviour, IInput
 {
     private PlayerInput _playerInput;
-    private bool _isFire = false;
     private InputAction _fireButtonAction;
     public event Action OnMove;
     public event Action OnFire;

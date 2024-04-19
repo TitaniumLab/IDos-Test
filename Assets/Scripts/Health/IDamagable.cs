@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
+using System;
 
 public interface IDamagable
 {
+    public event Action<int> OnDamageTacken;
+    public event Action OnDeath;
     public enum Fraction
     {
         Player,

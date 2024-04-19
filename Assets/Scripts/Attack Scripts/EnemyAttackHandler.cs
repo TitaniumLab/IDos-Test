@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-using Zenject;
 
 [RequireComponent(typeof(IInput))]
 public class EnemyAttackHandler : AttackHandler
